@@ -6,7 +6,6 @@ import userRoute from "./routes/userRoute";
 const app = new Hono()
 app.use(cors())
 
-app.use("/user", userRoute);
-
+app.route("/user", userRoute);
 
 export default app
