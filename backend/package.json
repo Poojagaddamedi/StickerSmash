@@ -4,6 +4,9 @@
     "dev": "bun run --hot src/index.ts"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.47.12",
+    "@types/dotenv": "^8.2.3",
+    "dotenv": "^16.4.7",
     "hono": "^4.6.16"
   },
   "devDependencies": {

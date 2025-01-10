@@ -2,8 +2,8 @@ POST http://localhost:3000/user/reg
 Content-Type: application/json
 
 {
-    "regNo": "12308010",
-    "password": "someone@2005"
+    "regNo": "12308018",
+    "password": "ashwin@2005"
 }
 
 ###
