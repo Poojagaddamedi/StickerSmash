@@ -1,6 +1,7 @@
 import {getCookie} from 'hono/cookie'
+import { Context, Next } from 'hono';
 
-const userMiddleware = (c, next) => {
+const userMiddleware = (c: Context, next: Next) => {
     console.log("1st reacheed middleware");
     const token = getCookie(c, "token");
     console.log(token);

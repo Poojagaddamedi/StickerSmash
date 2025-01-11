@@ -16,29 +16,30 @@ userRoute.post("/login", async (c) => {
                             .select("*")
                             .eq("regNo", regNo)
                             .eq("password", password);
-
-    if (data?.length > 0) {
-        setCookie(c, "token", regNo);
-        return c.json({ mes: "you have logged in", user: data, error });
-    } else {
+    if(!data) {
         return c.json({ mes: "invalid credentials" }, 401);
     }
+    setCookie(c, "token", regNo);
+    return c.json({ mes: "you have logged in", user: data, error });
+    
 });
 
 
 userRoute.post("/reg", async (c) => {
-    const { regNo, password, skills } = await c.req.json();
+    const { regNo, password, skills, github, linkedin } = await c.req.json();
     const {data: user, error: userError} = await supabase
                             .from("user")
                             .select("*")
                             .eq("regNo", regNo);
-    
+    if(!user) {
+        return c.json({ mes: "user not found", userError }, 401);
+    }
     if (user?.length > 0) {
         return c.json({ mes: "user already exists", userError }, 401);
     }
     const {data: userData} = await supabase
                             .from("user")
-                            .insert({regNo, password, skills});
+                            .insert({regNo, password, skills, github, linkedin});
 
     return c.json({ mes: "user registered" });
 });
