@@ -56,11 +56,34 @@ userRoute.post("/suggestions", userMiddleware, async (c) => {
 })
 
 userRoute.post("/friend-req", userMiddleware, async (c) => {
-    const {regNo} = await c.req.json();
+    const {regNo, friendRegNo} = await c.req.json();
     console.log(regNo);
-    
-    
+    const {data, error} = await supabase
+                                .from("request")
+                                .insert({requestRegNo: regNo, recRegNo: friendRegNo});
+    return c.json({ mes: "friend request sent", data, error });
 })
+
+userRoute.get("/friend-req/:regNo", userMiddleware, async (c) => {
+    const {regNo} = c.req.param();
+    const {data, error} = await supabase
+                                .from("request")
+                                .select("*")
+                                .eq("recRegNo", regNo);
+    return c.json({ mes: data});
+})
+
+userRoute.put("/accept-friend-req", userMiddleware, async (c) => {
+    const {regNo, friendRegNo} = await c.req.json();
+    const {data, error} = await supabase
+                                .from("request")
+                                .update({status: "accepted"})
+                                .eq("requestRegNo", friendRegNo)
+                                .eq("recRegNo", regNo);
+    return c.json({ mes: "friend request accepted", data, error });
+});
+
+
 userRoute.get("/logout", async (c) => {
     setCookie(c, "token", "");
     return c.json({ mes: "logged out" });

@@ -29,3 +29,28 @@ Content-Type: application/json
 ###
 
 GET http://localhost:3000/user/logout
+
+###
+
+POST http://localhost:3000/user/friend-req
+Content-Type: application/json
+
+{
+    "regNo": "12308021",
+    "friendRegNo": "12308018"
+}
+
+###
+
+GET http://localhost:3000/user/friend-req/12308018
+
+
+###
+
+PUT http://localhost:3000/user/accept-friend-req
+Content-Type: application/json
+
+{
+    "regNo": "12308018",
+    "friendRegNo": "12308021"
+}
