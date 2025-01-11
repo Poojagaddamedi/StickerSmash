@@ -2,8 +2,9 @@ POST http://localhost:3000/user/reg
 Content-Type: application/json
 
 {
-    "regNo": "12308018",
-    "password": "ashwin@2005"
+    "regNo": "12308021",
+    "password": "someone123@2005",
+    "skills": ["python", "java", "c++"]
 }
 
 ###
@@ -15,3 +16,16 @@ Content-Type: application/json
     "regNo": "12308019",
     "password": "pooja@2005"
 }
+
+###
+
+POST http://localhost:3000/user/suggestions
+Content-Type: application/json
+
+{
+    "skills": ["c++"]
+}
+
+###
+
+GET http://localhost:3000/user/logout

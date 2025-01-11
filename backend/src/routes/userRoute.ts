@@ -3,19 +3,22 @@ import { Hono } from "hono"
 const userRoute = new Hono();
 
 import supabase from "../database/db";
+import userMiddleware from "../middleware/userMiddlware";
+import { setCookie } from "hono/cookie";
 
 
  
 userRoute.post("/login", async (c) => {
     const { regNo, password } = await c.req.json();
-    
+
     const {data, error} = await supabase
                             .from("user")
                             .select("*")
                             .eq("regNo", regNo)
                             .eq("password", password);
-    
+
     if (data?.length > 0) {
+        setCookie(c, "token", regNo);
         return c.json({ mes: "you have logged in", user: data, error });
     } else {
         return c.json({ mes: "invalid credentials" }, 401);
@@ -24,23 +27,43 @@ userRoute.post("/login", async (c) => {
 
 
 userRoute.post("/reg", async (c) => {
-    const { regNo, password } = await c.req.json();
+    const { regNo, password, skills } = await c.req.json();
     const {data: user, error: userError} = await supabase
                             .from("user")
                             .select("*")
                             .eq("regNo", regNo);
-    console.log(user);
+    
     if (user?.length > 0) {
         return c.json({ mes: "user already exists", userError }, 401);
     }
-    const {data: userData, error: userDataError} = await supabase
+    const {data: userData} = await supabase
                             .from("user")
-                            .insert({regNo, password});
-    if (userDataError) {
-        return c.json({ mes: "user already exists", userDataError }, 401);
-    }
+                            .insert({regNo, password, skills});
+
     return c.json({ mes: "user registered" });
 });
 
+userRoute.post("/suggestions", userMiddleware, async (c) => {
+    console.log("2nd reacheed actual route");
+    
+    const { skills } = await c.req.json();
+    const { data, error } = await supabase
+                            .from("user")
+                            .select("*")
+                            .contains("skills", skills); 
+    console.log(error);
+    return c.json({ mes: "suggestions", data, error });
+})
+
+userRoute.post("/friend-req", userMiddleware, async (c) => {
+    const {regNo} = await c.req.json();
+    console.log(regNo);
+    
+    
+})
+userRoute.get("/logout", async (c) => {
+    setCookie(c, "token", "");
+    return c.json({ mes: "logged out" });
+})
 
 export default userRoute;
