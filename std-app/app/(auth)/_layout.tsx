@@ -1,23 +1,57 @@
-import { View, Text, TouchableOpacity, SafeAreaView } from "react-native";
-import { Slot } from "expo-router";
-import { useRouter } from "expo-router";
+import { Tabs } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native';
 
-const _layout = () => {
-  const router = useRouter();
-
+export default function AuthLayout() {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Slot />
-      <View style={{ flexDirection: 'row', justifyContent: 'space-around', padding: 20, backgroundColor: '#fff' }}>
-        <TouchableOpacity onPress={() => router.replace('/home')}>
-          <Text style={{ fontSize: 16, color: '#333' }}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.replace('/account')}>
-          <Text style={{ fontSize: 16, color: '#333' }}>Account</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: '#fff', 
+          borderTopWidth: 0,
+          elevation: 0,
+          shadowOpacity: 0,
+          height: 60,
+          paddingBottom: 10,
+        },
+        tabBarActiveTintColor: '#3DABFF',
+        tabBarInactiveTintColor: '#888',
+      }}
+    >
+
+      <Tabs.Screen
+        name="home"
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="account"
+        options={{
+          tabBarLabel: 'Profile', 
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="welcome"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="profile/[id]"
+        options={{
+          href: null,
+        }}
+      />
+
+    </Tabs>
+
   );
 }
-
-export default _layout;
