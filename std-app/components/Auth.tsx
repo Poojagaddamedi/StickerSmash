@@ -64,7 +64,7 @@ export default function Auth() {
 
   return (
     <>
-      <Button onPress={performOAuth} title="Sign in with Google" />
+      <Button onPress={performOAuth} title="HI Sign in with Google" />
     </>
   );
 }
